@@ -33,7 +33,20 @@ async function run() {
       .collection("popularInstructors");
     const enrolledCollections = client.db("dnacePlusDB").collection("enroll");
     const usersCollections = client.db("dnacePlusDB").collection("users");
-    
+
+    //  get users API
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+   
+      const query ={email:user.email}
+      const existUser = await usersCollections.findOne(query)
+ 
+      if(existUser){
+        return res.send({message:'user already exists'})
+      }
+      const result = await usersCollections.insertOne(user);
+      res.send(result);
+    });
 
     app.get("/class", async (req, res) => {
       const result = await clssesCollections.find().toArray();
