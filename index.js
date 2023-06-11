@@ -32,6 +32,7 @@ async function run() {
 
 const clssesCollections = client.db("dnacePlusDB").collection('popularClasses')
 const instructorsCollections = client.db("dnacePlusDB").collection('popularInstructors')
+const enrolledCollections = client.db("dnacePlusDB").collection('enrollled')
 
 
 app.get('/class',async(req,res)=>{
