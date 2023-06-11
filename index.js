@@ -38,6 +38,10 @@ app.get('/class',async(req,res)=>{
   const result = await clssesCollections.find().toArray()
   res.send(result)
 })
+app.get('/instructors',async(req,res)=>{
+  const result = await instructorsCollections.find().toArray()
+  res.send(result)
+})
 
 
     // Send a ping to confirm a successful connection
