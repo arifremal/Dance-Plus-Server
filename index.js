@@ -44,6 +44,14 @@ app.get('/instructors',async(req,res)=>{
   res.send(result)
 })
 
+// enrolled students 
+app.post('enrollled',async (req,res)=>{
+  const item = req.body
+  const result = await enrolledCollections.insertOne(item)
+  res.send(result)
+
+})
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
