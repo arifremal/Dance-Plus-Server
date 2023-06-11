@@ -32,6 +32,8 @@ async function run() {
       .db("dnacePlusDB")
       .collection("popularInstructors");
     const enrolledCollections = client.db("dnacePlusDB").collection("enroll");
+    const usersCollections = client.db("dnacePlusDB").collection("users");
+    
 
     app.get("/class", async (req, res) => {
       const result = await clssesCollections.find().toArray();
@@ -46,7 +48,7 @@ async function run() {
     app.post("/enroll", async (req, res) => {
       const item = req.body;
       const result = await enrolledCollections.insertOne(item);
-      console.log(result);
+
       res.send(result);
     });
 
@@ -59,16 +61,15 @@ async function run() {
       const result = await enrolledCollections.find(query).toArray();
       res.send(result);
     });
-    
+
     //  my class
     app.get("/enroll/:mail", async (req, res) => {
-      console.log(req.params.mail);
       const result = await enrolledCollections
         .find({ email: req.params.mail })
         .toArray();
       res.send(result);
     });
-    // class Delete 
+    // class Delete
 
     app.delete("/enroll/:id", async (req, res) => {
       const id = req.params.id;
@@ -83,7 +84,6 @@ async function run() {
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {
- 
     // await client.close();
   }
 }
