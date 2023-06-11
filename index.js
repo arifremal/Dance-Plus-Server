@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 // middleware
 require("dotenv").config();
 app.use(cors());
@@ -31,9 +31,7 @@ async function run() {
     const instructorsCollections = client
       .db("dnacePlusDB")
       .collection("popularInstructors");
-    const enrolledCollections = client
-      .db("dnacePlusDB")
-      .collection("enroll");
+    const enrolledCollections = client.db("dnacePlusDB").collection("enroll");
 
     app.get("/class", async (req, res) => {
       const result = await clssesCollections.find().toArray();
@@ -49,6 +47,33 @@ async function run() {
       const item = req.body;
       const result = await enrolledCollections.insertOne(item);
       console.log(result);
+      res.send(result);
+    });
+
+    app.get("/enroll", async (req, res) => {
+      const email = req.query.email;
+      if (!email) {
+        res.send([]);
+      }
+      const query = { email: email };
+      const result = await enrolledCollections.find(query).toArray();
+      res.send(result);
+    });
+    
+    //  my class
+    app.get("/enroll/:mail", async (req, res) => {
+      console.log(req.params.mail);
+      const result = await enrolledCollections
+        .find({ email: req.params.mail })
+        .toArray();
+      res.send(result);
+    });
+    // class Delete 
+
+    app.delete("/enroll/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = { _id: new ObjectId(id) };
+      const result = await enrolledCollections.deleteOne(data);
       res.send(result);
     });
 
