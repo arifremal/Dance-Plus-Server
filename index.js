@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+var jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 // middleware
@@ -73,7 +74,19 @@ app.get('/users',async(req,res)=>{
       const filtering = {_id: new ObjectId(id)}
       const updateDoc ={
         $set:{
-          role:'ins'
+          role:'instructor'
+        }
+      }
+      const result = await usersCollections.updateOne(filtering,updateDoc)
+      res.send(result)
+    })
+    // make student
+    app.patch('/users/student/:id', async (req,res)=>{
+      const id = req.params.id;
+      const filtering = {_id: new ObjectId(id)}
+      const updateDoc ={
+        $set:{
+          role:'student'
         }
       }
       const result = await usersCollections.updateOne(filtering,updateDoc)
