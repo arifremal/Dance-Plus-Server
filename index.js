@@ -61,12 +61,16 @@ async function run() {
       res.send(token);
     });
 
+
     // get all users
 
     app.get("/users", async (req, res) => {
       const result = await usersCollections.find().toArray();
       res.send(result);
     });
+
+
+
 
     //  get users API
     app.post("/users", async (req, res) => {
@@ -153,6 +157,12 @@ app.get('/users/instructor/:email', async(req,res)=>{
       const result = await usersCollections.updateOne(filtering, updateDoc);
       res.send(result);
     });
+  
+    app.post('/class', async(req,res)=>{
+      const newItem = req.body ;
+      const result = await clssesCollections.insertOne(newItem)
+      res.send(result)
+    })
 
     app.get("/class", async (req, res) => {
       const result = await clssesCollections.find().toArray();
