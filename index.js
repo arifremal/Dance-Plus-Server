@@ -34,6 +34,14 @@ async function run() {
     const enrolledCollections = client.db("dnacePlusDB").collection("enroll");
     const usersCollections = client.db("dnacePlusDB").collection("users");
 
+
+    // get all users
+
+app.get('/users',async(req,res)=>{
+  const result= await usersCollections.find().toArray()
+  res.send(result)
+})
+
     //  get users API
     app.post("/users", async (req, res) => {
       const user = req.body;
@@ -47,6 +55,32 @@ async function run() {
       const result = await usersCollections.insertOne(user);
       res.send(result);
     });
+
+    app.patch('/users/admin/:id', async (req,res)=>{
+      const id = req.params.id;
+      const filtering = {_id: new ObjectId(id)}
+      const updateDoc ={
+        $set:{
+          role:'admin'
+        }
+      }
+      const result = await usersCollections.updateOne(filtering,updateDoc)
+      res.send(result)
+    })
+// make instructor
+    app.patch('/users/instructor/:id', async (req,res)=>{
+      const id = req.params.id;
+      const filtering = {_id: new ObjectId(id)}
+      const updateDoc ={
+        $set:{
+          role:'ins'
+        }
+      }
+      const result = await usersCollections.updateOne(filtering,updateDoc)
+      res.send(result)
+    })
+
+
 
     app.get("/class", async (req, res) => {
       const result = await clssesCollections.find().toArray();
